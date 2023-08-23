@@ -3,16 +3,22 @@ on:
     push:
         branches:
             - main
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
 jobs:
-    web-deploy:
-        name: Deploy
+    build:
         runs-on: ubuntu-latest
         steps:
-            - name: Get latest code
-              uses: actions/checkout@v3
-            - name: Upload files
-              uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-              with:
-                  server: s1.ct8.pl
-                  username: ${{secrets.username_ftp}}
-                  password: ${{secrets.password_ftp}}
+        - name: Krok 1 - pobranie kodu
+          uses: actions/checkout@v3
+        - name: Krok 2 - podpięcie Node.js
+          uses: actions/setup-node@v2
+          with:
+              node-version: "18.x"
+
+        - name: Instalacja dependencji
+          run: npm install
+        - name: Uruchomienie testów
+          run: npm test
