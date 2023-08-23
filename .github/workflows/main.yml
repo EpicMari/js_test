@@ -22,3 +22,15 @@ jobs:
           run: npm install
         - name: Uruchomienie testów
           run: npm test
+    web-deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get latest code
+              uses: actions/checkout@v3
+            - name: Upload files
+              uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+              with:
+                  server: s1.ct8.pl
+                  username: ${{secrets.username_ftp}}
+                  password: ${{secrets.password_ftp}}
